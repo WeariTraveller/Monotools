@@ -1,0 +1,35 @@
+{
+  "name": "monotools",
+  "version": "1.0.0",
+  "description": "Some useful tools for monorepos",
+  "keywords": [
+    "monorepo",
+    "pnpm",
+    "auto",
+    "tool"
+  ],
+  "homepage": "https://github.com/WeariTraveller/Monotools#readme",
+  "bugs": {
+    "url": "https://github.com/WeariTraveller/Monotools/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WeariTraveller/Monotools.git"
+  },
+  "license": "GPL-3.0-or-later",
+  "author": "WeariTraveller",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky",
+    "fmt-staged": "nano-staged",
+    "test": "jest"
+  },
+  "packageManager": "pnpm@10.12.4",
+  "devDependencies": {
+    "@biomejs/biome": "^2.1.3",
+    "husky": "^9.1.7",
+    "jest": "^30.0.5",
+    "nano-staged": "^0.8.0"
+  }
+}
