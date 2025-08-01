@@ -20,6 +20,9 @@ importers:
       nano-staged:
         specifier: ^0.8.0
         version: 0.8.0
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
 packages:
 
@@ -1282,6 +1285,11 @@ packages:
   type-fest@0.21.3:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
+
+  typescript@5.9.2:
+    resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
+    engines: {node: '>=14.17'}
+    hasBin: true
 
   undici-types@7.8.0:
     resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
@@ -2807,6 +2815,8 @@ snapshots:
   type-detect@4.0.8: {}
 
   type-fest@0.21.3: {}
+
+  typescript@5.9.2: {}
 
   undici-types@7.8.0: {}
 

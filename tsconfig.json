@@ -1,8 +1,31 @@
 {
   "compilerOptions": {
+    "outDir": "${configDir}/dist",
+    "rootDir": "${configDir}/src",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": true,
+    "newLine": "lf",
+
+    "target": "ES2024",
+    "module": "NodeNext",
+    "forceConsistentCasingInFileNames": true,
+
     "allowJS": true,
-    "module": "ESNext",
-    "target": "ESNext"
+    "checkJS": false,
+    "strict": true,
+
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    "composite": true,
+    "skipLibCheck": true,
+    "incremental": true
   },
-  "exclude": ["node_modules"]
+  "include": ["${configDir}/src"],
+  "exclude": ["dist", "node_modules"]
 }
