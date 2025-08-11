@@ -1,7 +1,9 @@
+import { readdir } from "node:fs/promises";
+import { join } from "node:path";
 import type { CommandModule } from "yargs";
 
 interface Argv {
-  presets: string[];
+  presets?: string[];
   dest: string;
 }
 
@@ -14,7 +16,7 @@ const command: CommandModule<{}, Argv> = {
         describe: "Names of presets that need generating",
         type: "string",
         array: true,
-        default: [],
+        demandOption: false,
       })
       .option("dest", {
         alias: "d",
@@ -25,7 +27,10 @@ const command: CommandModule<{}, Argv> = {
   },
   async handler(argv) {
     const { copyPreset } = await import("../lib/preset.js");
-    copyPreset(argv.presets, argv.dest);
+    copyPreset(
+      argv.presets ?? readdir(join(__dirname, "../../assets")),
+      argv.dest,
+    );
   },
 };
 
