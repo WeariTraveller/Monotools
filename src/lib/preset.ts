@@ -1,15 +1,15 @@
 import path from "node:path";
 import fs from "fs-extra";
 
-const assetsDir = path.resolve(__dirname, "../../assets");
+const assetsDir = path.join(__dirname, "../../assets");
 export async function copyPreset(
   presets: string[] | Promise<string[]>,
   destDir: string,
 ) {
   if (presets instanceof Promise) presets = await presets;
   for (const preset of presets) {
-    const src = path.resolve(assetsDir, preset);
-    const target = path.resolve(destDir, preset);
+    const src = path.join(assetsDir, preset);
+    const target = path.join(destDir, preset);
 
     if (!(await fs.exists(src))) {
       console.warn(`${preset} is unknown! Skip`);

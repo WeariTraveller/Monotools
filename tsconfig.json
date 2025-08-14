@@ -10,10 +10,12 @@
 
     "target": "ES2024",
     "module": "NodeNext",
+    "esModuleInterop": true,
+    "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
 
-    "allowJS": true,
-    "checkJS": false,
+    "allowJs": true,
+    "checkJs": false,
     "strict": true,
 
     "noUnusedLocals": false,
@@ -27,5 +29,5 @@
     "incremental": true
   },
   "include": ["${configDir}/src"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["**/*.test.ts"]
 }
