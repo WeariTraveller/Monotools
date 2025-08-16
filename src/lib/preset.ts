@@ -12,11 +12,11 @@ export async function copyPreset(presets: string[], destDir: string) {
       continue;
     }
     if (await fs.exists(target)) {
-      console.log(`${preset} has existed in destination directory! Skip`);
+      console.log(`${preset} already existed in advance! Skip`);
       continue;
     }
 
     await fs.copy(src, target, { overwrite: false, errorOnExist: true });
-    console.log(`${preset} has been generated!`);
+    console.log(`√ ${preset} has been generated!`);
   }
 }
