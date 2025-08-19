@@ -1,6 +1,7 @@
 import { readdir } from "node:fs/promises";
 import { join } from "node:path";
 import type { CommandModule } from "yargs";
+import { assetsDir } from "../const.js";
 
 interface Argv {
   presets?: string[];
@@ -27,10 +28,11 @@ const command: CommandModule<{}, Argv> = {
   },
   async handler(argv) {
     const { copy } = await import("../service/informativeCopy.js");
-    copy(
-      argv.presets ?? (await readdir(join(__dirname, "../../assets"))),
-      argv.dest,
-    );
+    for (const preset of argv.presets ?? (await readdir(assetsDir))) {
+      const src = join(assetsDir, preset);
+      const target = join(argv.dest, preset);
+      copy(src, target, { overwrite: false });
+    }
   },
 };
 
