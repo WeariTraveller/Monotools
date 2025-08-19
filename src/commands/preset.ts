@@ -26,8 +26,8 @@ const command: CommandModule<{}, Argv> = {
       });
   },
   async handler(argv) {
-    const { copyPreset } = await import("../lib/preset.js");
-    copyPreset(
+    const { copy } = await import("../service/informativeCopy.js");
+    copy(
       argv.presets ?? (await readdir(join(__dirname, "../../assets"))),
       argv.dest,
     );

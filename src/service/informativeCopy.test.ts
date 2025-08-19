@@ -1,4 +1,4 @@
-import { copyPreset } from "./preset";
+import { copy } from "./informativeCopy";
 
 jest.mock("fs-extra", () => ({
   exists: jest.fn(
@@ -12,7 +12,7 @@ jest.mock("fs-extra", () => ({
 }));
 const fse = jest.mocked(require("fs-extra"));
 
-describe("src/lib/preset.ts' pub fn copyPreset", () => {
+describe("src/lib/preset.ts' pub fn copy", () => {
   const files = ["There're", "3", "files"];
   const log = jest.spyOn(console, "log").mockImplementation();
   const warn = jest.spyOn(console, "warn").mockImplementation();
@@ -20,7 +20,7 @@ describe("src/lib/preset.ts' pub fn copyPreset", () => {
   beforeEach(() => jest.clearAllMocks());
 
   it("usually works well", async () => {
-    await copyPreset(files, ".");
+    await copy(files, ".");
     expect(log.mock.calls.flat()).toEqual(
       expect.arrayOf(expect.stringMatching(/^√/)),
     );
@@ -30,7 +30,7 @@ describe("src/lib/preset.ts' pub fn copyPreset", () => {
 
   it("refuses to overwrite existed files", async () => {
     fse.exists.mockResolvedValue(true);
-    await copyPreset(["existed"], ".");
+    await copy(["existed"], ".");
     expect(log.mock.calls[0][0]).toMatch(/^existed already existed/);
     expect(warn).toHaveBeenCalledTimes(0);
     expect(fse.copy).toHaveBeenCalledTimes(0);
@@ -38,7 +38,7 @@ describe("src/lib/preset.ts' pub fn copyPreset", () => {
 
   it("refuses to copy unknown presets", async () => {
     fse.exists.mockResolvedValue(false);
-    await copyPreset(["undefined"], ".");
+    await copy(["undefined"], ".");
     expect(log).toHaveBeenCalledTimes(0);
     expect(warn.mock.calls[0][0]).toMatch(/^undefined is unknown/);
     expect(fse.copy).toHaveBeenCalledTimes(0);

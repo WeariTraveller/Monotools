@@ -2,7 +2,7 @@ import path from "node:path";
 import fs from "fs-extra";
 
 const assetsDir = path.join(__dirname, "../../assets");
-export async function copyPreset(presets: string[], destDir: string) {
+export async function copy(presets: string[], destDir: string) {
   for (const preset of presets) {
     const src = path.join(assetsDir, preset);
     const target = path.join(destDir, preset);
