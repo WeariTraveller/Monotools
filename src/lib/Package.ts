@@ -2,13 +2,31 @@ import { join } from "node:path";
 import { readJSONSync, writeJSONSync } from "fs-extra";
 import { readonlyHandler } from "./usefulProxies.js";
 
+function propretyDefiner(
+  obj: Object,
+  name: PropertyKey,
+  attr: PropertyDescriptor & ThisType<any>,
+) {
+  if (attr.get) throw new TypeError("No getter");
+  if (attr.set) throw new TypeError("No setter");
+  if (attr.writable === false) throw TypeError("New property must be writable");
+  if (attr.enumerable === false)
+    throw TypeError("New property must be enumerable");
+  if (attr.configurable === false)
+    throw TypeError("New property must be configurable");
+  (obj as any)[name] = attr.value;
+  return true;
+}
+
 export class Package {
+  /** Path to the directory of package.json */
   readonly path: string;
-  /** Transparent and non-extensible packageing of package.json */
+  /** Transparent and frozen packageing of package.json */
   readonly manifest: Object;
   /** A proxy whose properties you can get and set just like you are
    * operating the package.json.
-   * Don't use Object.defineProperty on it, or you'll get SyntaxError */
+   * Note: if you use Object.defineProperty, package.json won't be updated
+   * until you call manifestProxy like a function. */
   readonly manifestProxy: Object;
 
   constructor(path: string) {
@@ -29,8 +47,9 @@ export class Package {
           writeJSONSync(join(path, "package.json"), obj);
           return true;
         },
-        defineProperty() {
-          throw new SyntaxError("Don't use defineProperty");
+        defineProperty: propretyDefiner,
+        apply(obj) {
+          writeJSONSync(join(path, "package.json"), obj);
         },
       });
       return [readonlyProxy, operatableProxy];
