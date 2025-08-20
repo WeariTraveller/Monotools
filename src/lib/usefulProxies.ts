@@ -14,8 +14,7 @@ export const readonlyHandler: ProxyHandler<Object> = {
     // `in` returns true for inherited properties while it below doesn't
     if (!Object.getOwnPropertyDescriptor(obj, name)) return undefined;
     return {
-      //@ts-ignore: 7053
-      value: obj[name],
+      value: (obj as any)[name],
       writable: false,
       enumerable: true,
       configurable: false,
