@@ -16,8 +16,6 @@ describe("src/service/informativeCopy.ts' pub fn copy", () => {
   const log = jest.spyOn(console, "log").mockImplementation();
   const warn = jest.spyOn(console, "warn").mockImplementation();
 
-  beforeEach(() => jest.clearAllMocks());
-
   it("usually works well", async () => {
     await copy("file", "");
     expect(log.mock.calls.flat()).toEqual(

@@ -12,6 +12,7 @@ const config: Config = {
     "^.+\\.tsx?$": ["ts-jest", { tsconfig: "tsconfig.test.json" }],
   },
   errorOnDeprecated: true,
+  clearMocks: true,
 };
 
 export default config;
