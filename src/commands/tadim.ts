@@ -14,7 +14,8 @@ const forbidden = [
 ];
 
 const command: CommandModule<{}, ArgvType> = {
-  command: "ts-add-mndep <depend...>",
+  command: "ts-add-dep-in-mono <depend...>",
+  aliases: "tadim",
   describe:
     "To a ts subpackage in your monorepo, add anonther one as a dependency and update tsconfig reference",
   builder(yargs) {
