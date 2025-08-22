@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@pnpm/filter-workspace-packages": "^1000.0.33",
+    "@pnpm/types": "^1000.7.0",
     "fs-extra": "^11.3.1",
     "yargs": "^18.0.0"
   }
