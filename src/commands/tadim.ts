@@ -1,4 +1,5 @@
 import type { CommandModule } from "yargs";
+import { hideBin } from "yargs/helpers";
 
 interface ArgvType {
   depend: string[];
@@ -45,7 +46,23 @@ const command: CommandModule<{}, ArgvType> = {
       })
       .strict(false);
   },
-  handler() {},
+  async handler(argv) {
+    const { globPkgFromDir } = await import("../lib/filterPkgInMono.js");
+    const { tsAddRef } = await import("../lib/tsAddRef.js");
+    const { spawnSync } = await import("child_process");
+
+    const workspaceDir = ".";
+    const referencers = await globPkgFromDir(workspaceDir, [
+      argv.filter,
+      argv["filter-prod"],
+    ]);
+    const referencees = await globPkgFromDir(workspaceDir, [
+      argv.depend,
+      undefined,
+    ]);
+    await tsAddRef(referencers.allProjects, referencees.allProjects);
+    spawnSync("pnpm", ["add", ...hideBin(process.argv)], { stdio: "inherit" });
+  },
 };
 
 export default command;
