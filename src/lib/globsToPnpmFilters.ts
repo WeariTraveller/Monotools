@@ -16,5 +16,5 @@ export function globsToPnpmFilters(
       filter: glob,
       followProdDepsOnly: true,
     }));
-  return filters.concat(prodFilters);
+  return filters.push(...prodFilters);
 }
