@@ -8,7 +8,7 @@ export interface tsProjectRef {
 }
 
 export async function tsAddRef(referencers: Project[], referencees: Project[]) {
-  const refs: tsProjectRef[] = referencees.map((ref) => ({
+  const refs: tsProjectRef[] = referencees.map(ref => ({
     path: ref.rootDir,
   }));
   for (const referencer of referencers) {

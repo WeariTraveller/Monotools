@@ -20,7 +20,7 @@ const command: CommandModule<{}, ArgvType> = {
   describe:
     "To a ts subpackage in your monorepo, add anonther one as a dependency and update tsconfig reference",
   builder(yargs) {
-    forbidden.forEach((flag) => yargs.deprecateOption(flag, `No flag ${flag}`));
+    forbidden.forEach(flag => yargs.deprecateOption(flag, `No flag ${flag}`));
     return yargs
       .positional("depend", {
         describe: "Dependencies to add",
@@ -39,7 +39,7 @@ const command: CommandModule<{}, ArgvType> = {
         type: "string",
         array: true,
       })
-      .check((argv) => {
+      .check(argv => {
         if (!(argv.filter || argv["filter-prod"]))
           throw new Error("Missing filter");
         return true;
