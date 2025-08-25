@@ -1,5 +1,5 @@
 import type { Project } from "@pnpm/types";
-import { join, relative } from "path";
+import { join } from "path";
 import { tsAlterRef, type tsConfigWithRef } from "../tsAlterRef";
 
 jest.mock("fs-extra", () => ({
@@ -37,6 +37,17 @@ describe("src/lib/tsAddRef.ts pub fn tsAddRef", () => {
     expect(fse.writeJSON.mock.calls[0]).toEqual([
       expect.anything(),
       makeTsConfig("/another/c", "../b"),
+    ]);
+  });
+
+  it("usually removes references well", async () => {
+    const refers = makeProjects(["a"]);
+    const refees = makeProjects(["c"]);
+    fse.readJSON.mockResolvedValue(makeTsConfig("../b", "../c", "../d"));
+    await tsAlterRef(refers, refees, { action: "Remove" });
+    expect(fse.writeJSON.mock.calls[0]).toEqual([
+      expect.anything(),
+      makeTsConfig("../b", "../d"),
     ]);
   });
 });
