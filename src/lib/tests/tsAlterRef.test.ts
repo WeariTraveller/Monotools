@@ -1,6 +1,6 @@
 import type { Project } from "@pnpm/types";
 import { join, relative } from "path";
-import { tsAlterRef } from "../tsAlterRef";
+import { tsAlterRef, type tsConfigWithRef } from "../tsAlterRef";
 
 jest.mock("fs-extra", () => ({
   readJSON: jest.fn(() => Promise.resolve({})),
@@ -14,44 +14,29 @@ function makeProjects(dirs: string[]) {
     rootDirRealPath: join("/path/repo", dir),
   })) as Project[];
 }
-function tsConfig(path: string) {
-  return join(path, "tsconfig.json");
+function makeTsConfig(...refsPaths: string[]): tsConfigWithRef {
+  return { references: refsPaths.map(path => ({ path })) };
 }
 
 describe("src/lib/tsAddRef.ts pub fn tsAddRef", () => {
-  it("usually works well", async () => {
-    const refers = makeProjects(["a", "b"]);
-    const refees = makeProjects(["c", "d"]);
+  it("usually adds references well", async () => {
+    const refers = makeProjects(["a", "b/e"]);
+    const refees = makeProjects(["a/c", "d"]);
     await tsAlterRef(refers, refees);
-    const args = refers.map(refer => [
-      tsConfig(refer.rootDirRealPath),
-      {
-        references: refees.map(refee => ({
-          path: relative(refer.rootDirRealPath, refee.rootDirRealPath),
-        })),
-      },
+    expect(fse.writeJSON.mock.calls).toEqual([
+      [expect.anything(), makeTsConfig("c", "../d")],
+      [expect.anything(), makeTsConfig("../../a/c", "../../d")],
     ]);
-    expect(fse.writeJSON.mock.calls).toEqual(args);
   });
 
   it("won't overwrite existed references", async () => {
     const refers = makeProjects(["a"]);
     const refees = makeProjects(["b"]);
-    fse.readJSON.mockResolvedValue({ references: [{ path: "/another/c" }] });
+    fse.readJSON.mockResolvedValue(makeTsConfig("/another/c"));
     await tsAlterRef(refers, refees);
     expect(fse.writeJSON.mock.calls[0]).toEqual([
-      tsConfig(refers[0].rootDirRealPath),
-      {
-        references: [
-          { path: "/another/c" },
-          {
-            path: relative(
-              refers[0].rootDirRealPath,
-              refees[0].rootDirRealPath,
-            ),
-          },
-        ],
-      },
+      expect.anything(),
+      makeTsConfig("/another/c", "../b"),
     ]);
   });
 });
