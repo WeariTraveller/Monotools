@@ -14,7 +14,9 @@ export namespace tsAlterRef {
   };
 }
 
-const actionMap = {
+const actionMap: {
+  [k in tsAlterRef.Action]: (_0: tsConfigWithRef, _1: tsProjectRef[]) => void;
+} = {
   Add: tsConfigAddRef,
   Remove: tsConfigRmvRef,
 };
@@ -53,5 +55,5 @@ export function tsConfigAddRef(config: tsConfigWithRef, refs: tsProjectRef[]) {
 
 export function tsConfigRmvRef(config: tsConfigWithRef, refs: tsProjectRef[]) {
   const refsPaths = new Set(refs.map(ref => ref.path));
-  config.references.filter(ref => !refsPaths.has(ref.path));
+  config.references = config.references.filter(ref => !refsPaths.has(ref.path));
 }
