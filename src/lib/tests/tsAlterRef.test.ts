@@ -1,6 +1,6 @@
 import type { Project } from "@pnpm/types";
 import { join, relative } from "path";
-import { tsAddRef } from "../tsAddRef";
+import { tsAlterRef } from "../tsAlterRef";
 
 jest.mock("fs-extra", () => ({
   readJSON: jest.fn(() => Promise.resolve({})),
@@ -22,7 +22,7 @@ describe("src/lib/tsAddRef.ts pub fn tsAddRef", () => {
   it("usually works well", async () => {
     const refers = makeProjects(["a", "b"]);
     const refees = makeProjects(["c", "d"]);
-    await tsAddRef(refers, refees);
+    await tsAlterRef(refers, refees);
     const args = refers.map(refer => [
       tsConfig(refer.rootDirRealPath),
       {
@@ -38,7 +38,7 @@ describe("src/lib/tsAddRef.ts pub fn tsAddRef", () => {
     const refers = makeProjects(["a"]);
     const refees = makeProjects(["b"]);
     fse.readJSON.mockResolvedValue({ references: [{ path: "/another/c" }] });
-    await tsAddRef(refers, refees);
+    await tsAlterRef(refers, refees);
     expect(fse.writeJSON.mock.calls[0]).toEqual([
       tsConfig(refers[0].rootDirRealPath),
       {

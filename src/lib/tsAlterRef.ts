@@ -7,7 +7,10 @@ export interface tsProjectRef {
   prepend?: boolean;
 }
 
-export async function tsAddRef(referencers: Project[], referencees: Project[]) {
+export async function tsAlterRef(
+  referencers: Project[],
+  referencees: Project[],
+) {
   for (const referencer of referencers) {
     const refs: tsProjectRef[] = referencees.map(ref => ({
       path: relative(referencer.rootDirRealPath, ref.rootDirRealPath),

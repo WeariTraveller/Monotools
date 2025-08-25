@@ -48,7 +48,7 @@ const command: CommandModule<{}, ArgvType> = {
   },
   async handler(argv) {
     const { globPkgFromDir } = await import("../lib/filterPkgInMono.js");
-    const { tsAddRef } = await import("../lib/tsAddRef.js");
+    const { tsAlterRef } = await import("../lib/tsAlterRef.js");
     const { spawnSync } = await import("child_process");
 
     const workspaceDir = ".";
@@ -60,7 +60,7 @@ const command: CommandModule<{}, ArgvType> = {
       argv.depend,
       undefined,
     ]);
-    await tsAddRef(referencers.allProjects, referencees.allProjects);
+    await tsAlterRef(referencers.allProjects, referencees.allProjects);
     spawnSync("pnpm", ["add", ...hideBin(process.argv)], { stdio: "inherit" });
   },
 };
