@@ -5,6 +5,7 @@ interface ArgvType {
   depend: string[];
   filter?: string[];
   "filter-prod"?: string[];
+  "no-pm"?: boolean;
 }
 
 const forbidden = [
@@ -13,12 +14,13 @@ const forbidden = [
   "test-pattern",
   "changed-files-ignore-pattern",
 ];
+const removals = ["ts-eliminate-dep-in-mono", "tedim"];
 
 const command: CommandModule<{}, ArgvType> = {
   command: "ts-add-dep-in-mono <depend...>",
-  aliases: "tadim",
+  aliases: ["tadim", ...removals],
   describe:
-    "To a ts subpackage in your monorepo, add anonther one as a dependency and update tsconfig reference",
+    "To a ts subpackage in your monorepo, add or eliminate/remove anonther one as a dependency and update tsconfig reference",
   builder(yargs) {
     forbidden.forEach(flag => yargs.deprecateOption(flag, `No flag ${flag}`));
     return yargs
@@ -39,6 +41,10 @@ const command: CommandModule<{}, ArgvType> = {
         type: "string",
         array: true,
       })
+      .option("no-pm", {
+        describe: "Only alter tsconfig references, don't exec package manager",
+        type: "boolean",
+      })
       .check(argv => {
         if (!(argv.filter || argv["filter-prod"]))
           throw new Error("Missing filter");
@@ -51,6 +57,7 @@ const command: CommandModule<{}, ArgvType> = {
     const { tsAlterRef } = await import("../lib/tsAlterRef.js");
     const { spawnSync } = await import("child_process");
 
+    const act = removals.includes(argv._[0] as string) ? "Remove" : "Add";
     const workspaceDir = ".";
     const referencers = await globPkgFromDir(workspaceDir, [
       argv.filter,
@@ -60,8 +67,14 @@ const command: CommandModule<{}, ArgvType> = {
       argv.depend,
       undefined,
     ]);
-    await tsAlterRef(referencers.allProjects, referencees.allProjects);
-    spawnSync("pnpm", ["add", ...hideBin(process.argv)], { stdio: "inherit" });
+    await tsAlterRef(referencers.allProjects, referencees.allProjects, {
+      action: act,
+    });
+
+    if (!argv["no-pm"])
+      spawnSync("pnpm", ["add", ...hideBin(process.argv)], {
+        stdio: "inherit",
+      });
   },
 };
 
