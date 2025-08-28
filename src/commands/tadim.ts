@@ -1,5 +1,4 @@
 import type { CommandModule } from "yargs";
-import { hideBin } from "yargs/helpers";
 
 interface ArgvType {
   depend: string[];
@@ -56,6 +55,7 @@ const command: CommandModule<{}, ArgvType> = {
     const { globPkgFromDir } = await import("../lib/filterPkgInMono.js");
     const { tsAlterRef } = await import("../lib/tsAlterRef.js");
     const { spawnSync } = await import("child_process");
+    const { hideBin } = await import("yargs/helpers");
 
     const act = removals.includes(argv._[0] as string) ? "remove" : "add";
     const workspaceDir = ".";
@@ -72,7 +72,7 @@ const command: CommandModule<{}, ArgvType> = {
     });
 
     if (!argv["no-pm"])
-      spawnSync("pnpm", ["add", ...hideBin(process.argv)], {
+      spawnSync("pnpm", [act, ...hideBin(process.argv)], {
         stdio: "inherit",
       });
   },
