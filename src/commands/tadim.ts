@@ -57,7 +57,7 @@ const command: CommandModule<{}, ArgvType> = {
     const { tsAlterRef } = await import("../lib/tsAlterRef.js");
     const { spawnSync } = await import("child_process");
 
-    const act = removals.includes(argv._[0] as string) ? "Remove" : "Add";
+    const act = removals.includes(argv._[0] as string) ? "remove" : "add";
     const workspaceDir = ".";
     const referencers = await globPkgFromDir(workspaceDir, [
       argv.filter,

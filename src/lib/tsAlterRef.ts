@@ -8,7 +8,7 @@ export interface tsProjectRef {
 }
 
 export namespace tsAlterRef {
-  export type Action = "Add" | "Remove";
+  export type Action = "add" | "remove";
   export type Opts = {
     action: Action;
   };
@@ -17,14 +17,14 @@ export namespace tsAlterRef {
 const actionMap: {
   [k in tsAlterRef.Action]: (_0: tsConfigWithRef, _1: tsProjectRef[]) => void;
 } = {
-  Add: tsConfigAddRef,
-  Remove: tsConfigRmvRef,
+  add: tsConfigAddRef,
+  remove: tsConfigRmvRef,
 };
 
 export async function tsAlterRef(
   referencers: Project[],
   referencees: Project[],
-  opts: tsAlterRef.Opts = { action: "Add" },
+  opts: tsAlterRef.Opts = { action: "add" },
 ) {
   const act = actionMap[opts.action];
   for (const referencer of referencers) {
