@@ -28,6 +28,6 @@
     "skipLibCheck": true,
     "incremental": true
   },
-  "include": ["${configDir}/src"],
-  "exclude": ["**/*.test.ts"]
+  "include": ["src/**/*", "tests/**/*"],
+  "files": ["node_modules/vitest/globals.d.ts"]
 }
