@@ -1,20 +1,20 @@
-import { copy } from "./informativeCopy";
+import { copy } from "./informativeCopy.js";
 
-jest.mock("fs-extra", () => ({
-  exists: jest.fn(
+vi.mock("fs-extra", () => ({
+  exists: vi.fn(
     (() => {
       // Get true first, then false, then true ...
       let count = 1;
       return () => Promise.resolve(!(++count, (count %= 2)));
     })(),
   ),
-  copy: jest.fn(() => Promise.resolve()),
+  copy: vi.fn(() => Promise.resolve()),
 }));
-const fse = jest.mocked(require("fs-extra"));
+const fse = vi.mocked(require("fs-extra"));
 
 describe("src/service/informativeCopy.ts' pub fn copy", () => {
-  const log = jest.spyOn(console, "log").mockImplementation();
-  const warn = jest.spyOn(console, "warn").mockImplementation();
+  const log = vi.spyOn(console, "log").mockImplementation();
+  const warn = vi.spyOn(console, "warn").mockImplementation();
 
   it("usually works well", async () => {
     await copy("file", "");

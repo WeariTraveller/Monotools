@@ -1,12 +1,12 @@
 import type { Project } from "@pnpm/types";
 import { join } from "path";
-import { tsAlterRef, type tsConfigWithRef } from "../tsAlterRef";
+import { tsAlterRef, type tsConfigWithRef } from "../tsAlterRef.js";
 
-jest.mock("fs-extra", () => ({
-  readJSON: jest.fn(() => Promise.resolve({})),
-  writeJSON: jest.fn(() => Promise.resolve()),
+vi.mock("fs-extra", () => ({
+  readJSON: vi.fn(() => Promise.resolve({})),
+  writeJSON: vi.fn(() => Promise.resolve()),
 }));
-const fse = jest.mocked(require("fs-extra"));
+const fse = vi.mocked(require("fs-extra"));
 
 function makeProjects(dirs: string[]) {
   return dirs.map(dir => ({

@@ -30,7 +30,8 @@
     "prepare": "husky",
     "fmt-staged": "nano-staged",
     "build": "tsc -p tsconfig.build.json",
-    "test": "jest"
+    "test": "vitest",
+    "test:types": "tsc --noEmit"
   },
   "packageManager": "pnpm@10.15.0",
   "devDependencies": {
