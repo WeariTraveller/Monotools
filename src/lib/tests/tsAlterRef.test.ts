@@ -44,7 +44,7 @@ describe("src/lib/tsAddRef.ts pub fn tsAddRef", () => {
     const refers = makeProjects(["a"]);
     const refees = makeProjects(["c"]);
     fse.readJSON.mockResolvedValue(makeTsConfig("../b", "../c", "../d"));
-    await tsAlterRef(refers, refees, { action: "Remove" });
+    await tsAlterRef(refers, refees, { action: "remove" });
     expect(fse.writeJSON.mock.calls[0]).toEqual([
       expect.anything(),
       makeTsConfig("../b", "../d"),
