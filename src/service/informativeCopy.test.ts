@@ -1,20 +1,22 @@
 import { copy } from "./informativeCopy.js";
 
 vi.mock("fs-extra", () => ({
-  exists: vi.fn(
-    (() => {
-      // Get true first, then false, then true ...
-      let count = 1;
-      return () => Promise.resolve(!(++count, (count %= 2)));
-    })(),
-  ),
-  copy: vi.fn(() => Promise.resolve()),
+  default: {
+    exists: vi.fn(
+      (() => {
+        // Get true first, then false, then true ...
+        let count = 1;
+        return () => Promise.resolve(!(++count, (count %= 2)));
+      })(),
+    ),
+    copy: vi.fn(() => Promise.resolve()),
+  },
 }));
-const fse = vi.mocked(require("fs-extra"));
+const fse = vi.mocked((await import("fs-extra")).default, { deep: true });
 
 describe("src/service/informativeCopy.ts' pub fn copy", () => {
-  const log = vi.spyOn(console, "log").mockImplementation();
-  const warn = vi.spyOn(console, "warn").mockImplementation();
+  const log = vi.spyOn(console, "log").mockImplementation(vi.fn());
+  const warn = vi.spyOn(console, "warn").mockImplementation(vi.fn());
 
   it("usually works well", async () => {
     await copy("file", "");
@@ -26,7 +28,8 @@ describe("src/service/informativeCopy.ts' pub fn copy", () => {
   });
 
   it("inform right log to refuse to overwrite", async () => {
-    fse.exists.mockResolvedValue(true);
+    // It seems not to choose the correct overload. It chose the one with callback
+    fse.exists.mockResolvedValue(true as unknown as void);
     await copy("", "existed", { overwrite: false });
     expect(log.mock.calls[0][0]).toMatch(/^existed already existed/);
     expect(warn).toHaveBeenCalledTimes(0);
@@ -34,7 +37,7 @@ describe("src/service/informativeCopy.ts' pub fn copy", () => {
   });
 
   it("refuses to copy unknown source", async () => {
-    fse.exists.mockResolvedValue(false);
+    fse.exists.mockResolvedValue(false as unknown as void);
     await copy("undefined", "");
     expect(log).toHaveBeenCalledTimes(0);
     expect(warn.mock.calls[0][0]).toMatch(/^⚠️ undefined is unknown/);

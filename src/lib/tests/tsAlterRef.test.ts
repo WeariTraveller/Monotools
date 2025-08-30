@@ -6,7 +6,7 @@ vi.mock("fs-extra", () => ({
   readJSON: vi.fn(() => Promise.resolve({})),
   writeJSON: vi.fn(() => Promise.resolve()),
 }));
-const fse = vi.mocked(require("fs-extra"));
+const fse = vi.mocked(await import("fs-extra"));
 
 function makeProjects(dirs: string[]) {
   return dirs.map(dir => ({
