@@ -28,6 +28,5 @@
     "skipLibCheck": true,
     "incremental": true
   },
-  "include": ["src/**/*", "tests/**/*"],
-  "files": ["node_modules/vitest/globals.d.ts"]
+  "include": ["types", "src/**/*", "tests/**/*"]
 }
