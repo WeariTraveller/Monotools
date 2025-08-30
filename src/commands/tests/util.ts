@@ -12,9 +12,9 @@ export function doParse<T>(
   parser: yargs.Argv<T>,
   opts: string,
 ): Promise<ParseResult<T>> {
-  // TS can't choose the correct overload, so the 2nd arg of undefined is neccessary (2025 Aug.26)
   return new Promise(resolve =>
-    parser.parse(opts, undefined, (err, argv, output) =>
+    // TS can't choose the correct overload, so the 2nd arg of {} is neccessary (2025 Aug.26)
+    parser.parse(opts, {}, (err, argv, output) =>
       resolve({ err, argv, output }),
     ),
   );
