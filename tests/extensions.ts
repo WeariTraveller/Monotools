@@ -1,7 +1,7 @@
-import { expect, type Matchers } from "vitest";
+import { expect } from "vitest";
 
 expect.extend({
-  arrayOf(received: unknown, matcher: Matchers) {
+  arrayOf(received: unknown, matcher: unknown) {
     const pass =
       Array.isArray(received) &&
       received.every(item => {
