@@ -1,6 +1,7 @@
 import type { Project } from "@pnpm/types";
 import { readJSON, writeJSON } from "fs-extra";
-import { join, relative } from "upath";
+import { join } from "upath";
+import relative from "./relative.js";
 
 export interface tsProjectRef {
   path: string;

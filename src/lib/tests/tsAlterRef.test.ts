@@ -24,7 +24,7 @@ describe("src/lib/tsAddRef.ts pub fn tsAddRef", () => {
     const refees = makeProjects(["a/c", "d"]);
     await tsAlterRef(refers, refees);
     expect(fse.writeJSON.mock.calls).toEqual([
-      [expect.anything(), makeTsConfig("c", "../d")],
+      [expect.anything(), makeTsConfig("./c", "../d")],
       [expect.anything(), makeTsConfig("../../a/c", "../../d")],
     ]);
   });
