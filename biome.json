@@ -20,7 +20,8 @@
         "noCommaOperator": "warn"
       },
       "suspicious": {
-        "noAssignInExpressions": "warn"
+        "noAssignInExpressions": "warn",
+        "useIterableCallbackReturn": "warn"
       }
     }
   },

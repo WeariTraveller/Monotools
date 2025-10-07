@@ -21,7 +21,7 @@ const command: CommandModule<{}, ArgvType> = {
   describe:
     "To a ts subpackage in your monorepo, add or eliminate/remove anonther one as a dependency and update tsconfig reference",
   builder(yargs) {
-    forbidden.forEach(flag => yargs.deprecateOption(flag, `No flag ${flag}`));
+    forbidden.forEach(flag => yargs.deprecateOption(flag, "Unsupported"));
     return yargs
       .positional("depend", {
         describe: "Dependencies to add",
@@ -47,6 +47,9 @@ const command: CommandModule<{}, ArgvType> = {
       .check(argv => {
         if (!(argv.filter || argv["filter-prod"]))
           throw new Error("Missing filter");
+        forbidden.forEach(flag => {
+          if (argv[flag]) throw new Error(`Unsupported ${flag}`);
+        });
         return true;
       })
       .strict(false);
@@ -54,7 +57,7 @@ const command: CommandModule<{}, ArgvType> = {
   async handler(argv) {
     const { globPkgFromDir } = await import("../lib/filterPkgInMono.js");
     const { tsAlterRef } = await import("../lib/tsAlterRef.js");
-    const { spawnSync } = await import("child_process");
+    const { spawnSync } = await import("node:child_process");
     const { hideBin } = await import("yargs/helpers");
 
     const act = removals.includes(argv._[0] as string) ? "remove" : "add";
@@ -71,7 +74,8 @@ const command: CommandModule<{}, ArgvType> = {
       action: act,
     });
 
-    if (!argv["no-pm"])
+    // It seems argv[no-pm] is always falsy
+    if (argv["pm"] ?? true)
       spawnSync("pnpm", [act, ...hideBin(process.argv)], {
         stdio: "inherit",
       });
